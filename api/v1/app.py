@@ -10,16 +10,19 @@ app = Flask(__name__)
 app.register_blueprint(app_views)
 app.url_map.strict_slashes = False
 
+
 @app.teardown_appcontext
 def close(self):
     """close the session"""
     storage.close()
 
+
 @app.errorhandler(404)
 def page_not_found(error):
     '''return render_template'''
-    data = {'error' : 'Not found'}
+    data = {'error': 'Not found'}
     return jsonify(data), 404
+
 
 if __name__ == "__main__":
     host = getenv('HBNB_API_HOST')
