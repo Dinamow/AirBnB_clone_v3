@@ -28,4 +28,4 @@ def statssok():
             "states": storage.count(State),
             "users": storage.count(User),
            }
-    return data
+    return jsonify(data)
