@@ -22,7 +22,7 @@ def CitiesBySateId(state_id):
     return jsonify(ll), 200
 
 
-@app_views.route('/cities/<city_id>', methods=['GET'],
+@app_views.route('/cities/<string:city_id>', methods=['GET'],
                  strict_slashes=False)
 def getCityById(city_id):
     """get city by id"""
@@ -32,7 +32,7 @@ def getCityById(city_id):
     return jsonify(x.to_dict()), 200
 
 
-@app_views.route('/cities/<city_id>', methods=['DELETE'],
+@app_views.route('/cities/<string:city_id>', methods=['DELETE'],
                  strict_slashes=False)
 def deletecity(city_id):
     """deletes city by id"""
@@ -44,7 +44,7 @@ def deletecity(city_id):
     return jsonify({}), 200
 
 
-@app_views.route('/cities/<city_id>', methods=['PUT'],
+@app_views.route('/cities/<string:city_id>', methods=['PUT'],
                  strict_slashes=False)
 def updatecity(city_id):
     '''create city'''
@@ -65,7 +65,7 @@ def updatecity(city_id):
     return jsonify(stateObject.to_dict()), '200'
 
 
-@app_views.route('/states/<state_id>/cities', methods=['POST'],
+@app_views.route('/states/<string:state_id>/cities', methods=['POST'],
                  strict_slashes=False)
 def createcity(state_id):
     '''Creates a city'''
