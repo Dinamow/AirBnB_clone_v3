@@ -33,13 +33,12 @@ def StatusWithId(state_id):
                  methods=['DELETE'], strict_slashes=False)
 def DeleteObj(state_id):
     """deletes obj"""
-    ob = storage.all('State')
-    for x in ob.values():
-        if x.id == state_id:
-            storage.delete(x)
-            storage.save()
-            return jsonify({}), 200
-    abort(404)
+    x = storage.get(State, state_id)
+    if x is None:
+        abort(404)
+    storage.delete(x)
+    storage.save()
+    return jsonify({}), 200
 
 
 @app_views.route('/states/<string:state_id>', methods=['PUT'],
