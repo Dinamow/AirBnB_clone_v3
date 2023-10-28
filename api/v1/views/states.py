@@ -29,7 +29,7 @@ def StatusWithId(state_id):
     abort(404)
 
 
-@app_views.route('/states/<state_id>',
+@app_views.route('/states/<string:state_id>',
                  methods=['DELETE'], strict_slashes=False)
 def DeleteObj(state_id):
     """deletes obj"""
@@ -42,7 +42,7 @@ def DeleteObj(state_id):
     abort(404)
 
 
-@app_views.route('/states/<state_id>', methods=['PUT'],
+@app_views.route('/states/<string:state_id>', methods=['PUT'],
                  strict_slashes=False)
 def putinV(state_id):
     '''vladimir'''
