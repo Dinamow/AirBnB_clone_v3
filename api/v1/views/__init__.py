@@ -8,7 +8,4 @@ from api.v1.views.users import *
 from api.v1.views.states import *
 from api.v1.views.cities import *
 from api.v1.views.amenities import *
-<<<<<<< HEAD
-=======
 from api.v1.views.places_reviews import *
->>>>>>> a665912e3e58faedce1479b26a604ae35f72a3ad
