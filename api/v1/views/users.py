@@ -30,7 +30,7 @@ def getUserById(user_id):
 
 @app_views.route('users/<user_id>', methods=['DELETE'],
                  strict_slashes=False)
-def DeleteAmentiyById(user_id):
+def DeleteUserById(user_id):
     """delete amentiy"""
     element = storage.get(User, user_id)
     if not element:
