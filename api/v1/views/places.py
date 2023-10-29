@@ -15,7 +15,8 @@ def getPlacesByCity(city_id):
     ob = storage.all('Place')
     ll = []
     for place in ob.values():
-        ll.append(place.to_dict())
+        if city_id == place.city_id:
+            ll.append(place.to_dict())
     if len(ll) <= 0:
         abort(404)
     return jsonify(ll)
@@ -26,10 +27,9 @@ def getPlacesByCity(city_id):
 def getPlacesByid(place_id):
     """get place by id"""
     ob = storage.get(Place, place_id)
-    ob.to_dict()
     if ob is None:
         abort(404)
-    return jsonify(ll)
+    return jsonify(ob.to_dict())
 
 
 @app_views.route('/places/<string:place_id>', methods=['DELETE'],
@@ -37,14 +37,17 @@ def getPlacesByid(place_id):
 def deletePlacesByid(place_id):
     """delete place by id"""
     ob = storage.get(Place, place_id)
-    storage.delete(ob)
-    storage.save()
-    return jsonify({}), 200
+    if ob is None:
+        abort(404)
+    else:
+        storage.delete(ob)
+        storage.save()
+        return jsonify({}), 200
 
 
 @app_views.route('/cities/<string:city_id>/places', methods=['POST'],
                  strict_slashes=False)
-def createPlaces(place_id):
+def createPlaces(city_id):
     """create place"""
     try:
         response = request.get_json()
@@ -54,11 +57,11 @@ def createPlaces(place_id):
         abort(400, {'Missing name'})
     if response.get('user_id') is None:
         abort(400, {'Missing user_id'})
-    if storage.get(City, city_id) is None or storage.get('user_id') is None:
+    if storage.get(City, city_id) is None or not storage.get(User, 'user_id'):
         abort(404)
-    stateObject = Places(name=response['name'],
-                         user_id=response['user_id'],
-                         city_id=response['city_id'])
+    stateObject = Place(name=response['name'],
+                        user_id=response['user_id'],
+                        city_id=city_id)
     storage.new(stateObject)
     storage.save()
     return jsonify(stateObject.to_dict()), '201'
@@ -66,14 +69,12 @@ def createPlaces(place_id):
 
 @app_views.route('/places/<string:place_id>', methods=['PUT'],
                  strict_slashes=False)
-def putplace(state_id):
+def putplace(place_id):
     '''update place'''
     try:
         response = request.get_json()
     except ex:
         abort(400, {'Not a JSON'})
-    if response.get('name') is None:
-        abort(400, {'Missing name'})
     stateObject = storage.get(Place, place_id)
     if stateObject is None:
         abort(404)
