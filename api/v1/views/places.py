@@ -1,9 +1,18 @@
 #!/usr/bin/python3
-"""comment for file"""
-
+"""Amenity handlers"""
 from api.v1.views import app_views
 from flask import jsonify, abort, request
 from models import storage
-from models.state import State
+from models.place import Place
+from models.city import City
 
-pass
+
+@app_views.route('cities/<city_id>/places', methods=['GET'],
+                 strict_slashes=False)
+def getPlacesByCity(city_id):
+    """get amentiy"""
+    ob = storage.all('Place')
+    ll = []
+    for place in ob.values():
+        ll.append(place.to_dict())
+    return jsonify(ll)
