@@ -64,4 +64,13 @@ def UpdateAmenity(amenity_id):
         data = request.get_json()
     except Exception as e:
         return jsonify({"error": "Not a JSON"}), 400
-
+    amenity = storage.get(Amenity, amenity_id)
+    if not amenity_id:
+        abort(404)
+    else:
+        ignoreKeys = ['id', 'created_at', 'updated_at']
+        for key, val in data.items():
+            if key not in ignoreKeys:
+                setattr(amenity, key, val)
+        storage.save()
+        return jsonify(amenity.to_dict()), '200'
