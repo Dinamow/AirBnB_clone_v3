@@ -70,8 +70,7 @@ def poststate():
         abort(400, {'Not a JSON'})
     if response.get('name') is None:
         abort(400, {'Missing name'})
-    stateObject = State()
-    stateObject.name = response['name']
+    stateObject = State(name=response['name'])
     storage.new(stateObject)
     storage.save()
     return jsonify(stateObject.to_dict()), '201'
