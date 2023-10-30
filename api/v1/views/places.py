@@ -56,7 +56,8 @@ def createPlaces(city_id):
         abort(400, {'Missing name'})
     if not response.get('user_id'):
         abort(400, {'Missing user_id'})
-    if not storage.get(City, city_id) or not storage.get(User, response.get('user_id')):
+    if not storage.get(City, city_id) or not storage.get(User, response.get('\
+            user_id')):
         abort(404)
     stateObject = Place(**response)
     setattr(stateObject, 'city_id', city_id)
