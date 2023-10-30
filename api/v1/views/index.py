@@ -14,14 +14,16 @@ from models.user import User
 @app_views.route('status', strict_slashes=False)
 def statusok():
     """status home page"""
-    return jsonify(status='OK'), 200
+    status = {"status": "OK"}
+    return jsonify(status), 200
 
 
-@app_views.route('stats', strict_slashes=False, method=['GET'])
+@app_views.route('stats', strict_slashes=False)
 def statssok():
     """stats home page"""
+    count = storage.count(Amenity)
     data = {
-            "amenities": storage.count(Amenity),
+            "amenities": count,
             "cities": storage.count(City),
             "places": storage.count(Place),
             "reviews": storage.count(Review),
