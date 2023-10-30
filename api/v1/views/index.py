@@ -17,7 +17,7 @@ def statusok():
     return jsonify(status='OK'), 200
 
 
-@app_views.route('stats', strict_slashes=False)
+@app_views.route('/stats/', method=['GET'])
 def statssok():
     """stats home page"""
     data = {
@@ -28,4 +28,4 @@ def statssok():
             "states": storage.count(State),
             "users": storage.count(User),
            }
-    return data
+    return jsonify(data)
