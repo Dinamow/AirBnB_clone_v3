@@ -20,11 +20,10 @@ def listofstatus():
 @app_views.route('/states/<string:state_id>/', methods=['GET'])
 def StatusWithId(state_id):
     """gets obj with id"""
-    ob = storage.all('State')
-    for x in ob.values():
-        if x.id == state_id:
-            return jsonify(x.to_dict())
-    abort(404)
+    ob = storage.get(State, state_id)
+    if not ob:
+        abort(404, 'Not found')
+    return jsonify(ob.to_dict()), 200
 
 
 @app_views.route('/states/<string:state_id>/', methods=['DELETE'])
@@ -33,8 +32,7 @@ def DeleteObj(state_id):
     x = storage.get('State', state_id)
     if x is None:
         abort(404)
-    x.delete()
-    del x
+    storage.delete(x)
     storage.save()
     return jsonify({}), 200
 
