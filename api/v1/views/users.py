@@ -45,26 +45,25 @@ def DeleteUserById(user_id):
                  strict_slashes=False)
 def CreateUser():
     """Post user"""
-    try:
-        data = request.get_json()
-    except Exception as e:
+    data = request.get_json()
+    if not data:
         return jsonify({"error": "Not a JSON"}), 400
-    if "email" not in data:
+    if not data.get('email'):
         return jsonify({"error": "Missing email"}), 400
-    if "password" not in data:
+    if not data.get('password'):
         return jsonify({"error": "Missing password"}), 400
-    user = User(email=data["email"], password=data['password'])
+    user = User(**data)
     storage.new(user)
     storage.save()
+    return jsonify(data.to_dict())
 
 
-@app_views.route('users/<user_id>', methods=['POST'],
+@app_views.route('users/<user_id>', methods=['PUT'],
                  strict_slashes=False)
 def UpdateUser(user_id):
     """Update user"""
-    try:
-        data = request.get_json()
-    except Exception as e:
+    data = request.get_json()
+    if not data:
         return jsonify({"error": "Not a JSON"}), 400
     user = storage.get(User, user_id)
     if not user_id:
