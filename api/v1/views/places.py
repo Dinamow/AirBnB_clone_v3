@@ -49,19 +49,17 @@ def deletePlacesByid(place_id):
                  strict_slashes=False)
 def createPlaces(city_id):
     """create place"""
-    try:
-        response = request.get_json()
-    except ex:
+    response = request.get_json()
+    if not response:
         abort(400, {'Not a JSON'})
-    if response.get('name') is None:
+    if not response.get('name'):
         abort(400, {'Missing name'})
-    if response.get('user_id') is None:
+    if not response.get('user_id'):
         abort(400, {'Missing user_id'})
-    if storage.get(City, city_id) is None or not storage.get(User, 'user_id'):
+    if not storage.get(City, city_id) or not storage.get(User, 'user_id'):
         abort(404)
-    stateObject = Place(name=response['name'],
-                        user_id=response['user_id'],
-                        city_id=city_id)
+    stateObject = Place(**response)
+    setattr(stateObject, 'city_id', city_id)
     storage.new(stateObject)
     storage.save()
     return jsonify(stateObject.to_dict()), '201'
@@ -71,9 +69,8 @@ def createPlaces(city_id):
                  strict_slashes=False)
 def putplace(place_id):
     '''update place'''
-    try:
-        response = request.get_json()
-    except ex:
+    response = request.get_json()
+    if not response:
         abort(400, {'Not a JSON'})
     stateObject = storage.get(Place, place_id)
     if stateObject is None:

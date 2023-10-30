@@ -73,7 +73,7 @@ def createcity(state_id):
     if not storage.get(State, state_id):
         abort(404)
     stateObject = City(**response)
-    setattr(new_city, 'state_id', state_id)
+    setattr(stateObject, 'state_id', state_id)
     storage.new(stateObject)
     storage.save()
     return jsonify(stateObject.to_dict()), '201'
