@@ -37,6 +37,7 @@ def DeleteObj(state_id):
         abort(404)
     x.delete()
     del x
+    storage.save()
     return jsonify({}), 200
 
 
