@@ -59,7 +59,7 @@ def POSTReviewById(place_id):
         abort(400, {'error': 'Missing user_id'})
     if not response.get('text'):
         abort(400, {'error': 'Missing text'})
-    if not storage.get(User, user_id):
+    if not storage.get(User, response.get('user_id')):
         abort(404)
     stateObject = Review(**response)
     setattr(stateObject, 'place_id', place_id)
