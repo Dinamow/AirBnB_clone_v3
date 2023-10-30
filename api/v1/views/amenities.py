@@ -38,7 +38,7 @@ def DeleteAmentiyById(amenity_id):
     else:
         storage.delete(element)
         storage.save()
-        return (jsonify({}), 200)
+        return jsonify({}), 200
 
 
 @app_views.route('/amenities', methods=['POST'],
@@ -53,6 +53,7 @@ def CreateAmenity():
     amenity = Amenity(**data)
     storage.new(amenity)
     storage.save()
+    return jsonify(amenity.to_dict()), 201
 
 
 @app_views.route('/amenities/<string:amenity_id>', methods=['PUT'],
