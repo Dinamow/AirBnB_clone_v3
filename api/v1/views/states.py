@@ -7,7 +7,7 @@ from models import storage
 from models.state import State
 
 
-@app_views.route('/states', methods=['GET'], strict_slashes=False)
+@app_views.route('/states', methods=['GET'])
 def listofstatus():
     """comment for func"""
     ob = storage.all('State')
@@ -18,7 +18,7 @@ def listofstatus():
 
 
 @app_views.route('/states/<string:state_id>',
-                 methods=['GET'], strict_slashes=False)
+                 methods=['GET'])
 def StatusWithId(state_id):
     """gets obj with id"""
     ob = storage.all('State')
@@ -29,7 +29,7 @@ def StatusWithId(state_id):
 
 
 @app_views.route('/states/<string:state_id>',
-                 methods=['DELETE'], strict_slashes=False)
+                 methods=['DELETE'])
 def DeleteObj(state_id):
     """deletes obj"""
     x = storage.get('State', state_id)
@@ -41,10 +41,9 @@ def DeleteObj(state_id):
     return jsonify({}), 200
 
 
-@app_views.route('/states/<string:state_id>', methods=['PUT'],
-                 strict_slashes=False)
-def putinV(state_id):
-    '''vladimir'''
+@app_views.route('/states/<string:state_id>', methods=['PUT'])
+def putstate(state_id):
+    """put state"""
     try:
         response = request.get_json()
     except ex:
@@ -62,10 +61,9 @@ def putinV(state_id):
     return jsonify(stateObject.to_dict()), '200'
 
 
-@app_views.route('/states/', methods=['POST'],
-                 strict_slashes=False)
-def posting():
-    '''Creates a State'''
+@app_views.route('/states/', methods=['POST'])
+def poststate():
+    """post state"""
     try:
         response = request.get_json()
     except ex:
