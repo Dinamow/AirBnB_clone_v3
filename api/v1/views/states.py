@@ -32,10 +32,13 @@ def StatusWithId(state_id):
                  methods=['DELETE'], strict_slashes=False)
 def DeleteObj(state_id):
     """deletes obj"""
-    x = storage.get('State', state_id)
-    if x is None:
+    x = storage.all('State')
+    for y in x.values():
+        if y.id == state_id:
+            z = y
+    if z is None:
         abort(404)
-    storage.delete(x)
+    storage.delete(z)
     storage.save()
     return jsonify({}), 200
 
