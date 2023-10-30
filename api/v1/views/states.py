@@ -7,7 +7,7 @@ from models import storage
 from models.state import State
 
 
-@app_views.route('/states', methods=['GET'])
+@app_views.route('/states/', methods=['GET'])
 def listofstatus():
     """comment for func"""
     ob = storage.all('State')
@@ -17,8 +17,7 @@ def listofstatus():
     return jsonify(ll)
 
 
-@app_views.route('/states/<string:state_id>',
-                 methods=['GET'])
+@app_views.route('/states/<string:state_id>/', methods=['GET'])
 def StatusWithId(state_id):
     """gets obj with id"""
     ob = storage.all('State')
@@ -28,8 +27,7 @@ def StatusWithId(state_id):
     abort(404)
 
 
-@app_views.route('/states/<string:state_id>',
-                 methods=['DELETE'])
+@app_views.route('/states/<string:state_id>/', methods=['DELETE'])
 def DeleteObj(state_id):
     """deletes obj"""
     x = storage.get('State', state_id)
@@ -41,7 +39,7 @@ def DeleteObj(state_id):
     return jsonify({}), 200
 
 
-@app_views.route('/states/<string:state_id>', methods=['PUT'])
+@app_views.route('/states/<string:state_id>/', methods=['PUT'])
 def putstate(state_id):
     """put state"""
     try:
