@@ -40,9 +40,8 @@ def DeleteObj(state_id):
 @app_views.route('/states/<string:state_id>/', methods=['PUT'])
 def putstate(state_id):
     """put state"""
-    try:
-        response = request.get_json()
-    except ex:
+    response = request.get_json()
+    if not response:
         abort(400, {'Not a JSON'})
     if response.get('name') is None:
         abort(400, {'Missing name'})
