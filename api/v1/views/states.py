@@ -60,13 +60,12 @@ def putstate(state_id):
 @app_views.route('/states/', methods=['POST'])
 def poststate():
     """post state"""
-    try:
-        response = request.get_json()
-    except ex:
+    response = request.get_json()
+    if not response:
         abort(400, {'Not a JSON'})
-    if response.get('name') is None:
+    if not response.get('name'):
         abort(400, {'Missing name'})
-    stateObject = State(name=response['name'])
+    stateObject = State(**response)
     storage.new(stateObject)
     storage.save()
     return jsonify(stateObject.to_dict()), '201'
