@@ -7,8 +7,7 @@ from models import storage
 from models.city import City
 
 
-@app_views.route('/states/<state_id>/cities', methods=['GET'],
-                 strict_slashes=False)
+@app_views.route('/states/<string:state_id>/cities', methods=['GET'])
 def CitiesBySateId(state_id):
     """get cities by state id"""
     cities = storage.all('City')
@@ -21,8 +20,7 @@ def CitiesBySateId(state_id):
     return jsonify(ll), 200
 
 
-@app_views.route('/cities/<string:city_id>', methods=['GET'],
-                 strict_slashes=False)
+@app_views.route('/cities/<string:city_id>', methods=['GET'])
 def getCityById(city_id):
     """get city by id"""
     x = storage.get(City, city_id)
@@ -31,8 +29,7 @@ def getCityById(city_id):
     return jsonify(x.to_dict()), 200
 
 
-@app_views.route('/cities/<string:city_id>', methods=['DELETE'],
-                 strict_slashes=False)
+@app_views.route('/cities/<string:city_id>', methods=['DELETE'])
 def deletecity(city_id):
     """deletes city by id"""
     x = storage.get(City, city_id)
@@ -43,18 +40,16 @@ def deletecity(city_id):
     return jsonify({}), 200
 
 
-@app_views.route('/cities/<string:city_id>', methods=['PUT'],
-                 strict_slashes=False)
+@app_views.route('/cities/<string:city_id>', methods=['PUT'])
 def updatecity(city_id):
-    '''create city'''
-    try:
-        response = request.get_json()
-    except ex:
+    """put city"""
+    response = request.get_json()
+    if not response:
         abort(400, {'Not a JSON'})
-    if response.get('name') is None:
+    if not response.get('name'):
         abort(400, {'Missing name'})
     stateObject = storage.get(City, city_id)
-    if stateObject is None:
+    if not stateObject:
         abort(404)
     ignoreKeys = ['id', 'created_at', 'updated_at']
     for key, val in response.items():
@@ -64,17 +59,15 @@ def updatecity(city_id):
     return jsonify(stateObject.to_dict()), '200'
 
 
-@app_views.route('/states/<string:state_id>/cities', methods=['POST'],
-                 strict_slashes=False)
+@app_views.route('/states/<string:state_id>/cities', methods=['POST'])
 def createcity(state_id):
-    '''Creates a city'''
-    try:
-        response = request.get_json()
-    except ex:
+    """post city"""
+    response = request.get_json()
+    if not response:
         abort(400, {'Not a JSON'})
-    if response.get('name') is None:
+    if not response.get('name'):
         abort(400, {'Missing name'})
-    stateObject = City(name=response['name'], state_id=state_id)
+    stateObject = City(**response)
     storage.new(stateObject)
     storage.save()
     return jsonify(stateObject.to_dict()), '201'
