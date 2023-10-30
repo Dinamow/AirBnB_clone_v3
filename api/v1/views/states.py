@@ -61,7 +61,7 @@ def putstate(state_id):
     return jsonify(stateObject.to_dict()), '200'
 
 
-@app_views.route('/states', methods=['POST'])
+@app_views.route('/states/', methods=['POST'])
 def poststate():
     """post state"""
     try:
