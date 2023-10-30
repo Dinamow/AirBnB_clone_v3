@@ -59,7 +59,7 @@ def CreateAmenity():
                  strict_slashes=False)
 def UpdateAmenity(amenity_id):
     """Update amentiy"""
-        data = request.get_json()
+    data = request.get_json()
     if not data:
         return jsonify({"error": "Not a JSON"}), 400
     amenity = storage.get(Amenity, amenity_id)
