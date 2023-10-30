@@ -129,3 +129,29 @@ class TestFileStorage(unittest.TestCase):
         self.assertIsNone(storage.get(BaseModel, 'invalid_id_adress'))
         self.assertIs(storage.get(BaseModel, baseModel.id), baseModel)
         FileStorage._FileStorage__objects = save
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count_file(self):
+        """Test for count"""
+        save = FileStorage._FileStorage__objects
+        FileStorage._FileStorage__objects = {}
+        storage = FileStorage()
+
+        for index in range(4):
+            base = BaseModel()
+            storage.new(base)
+        storage.save()
+
+        for test_type in (str, int, float):
+            self.assertEqual(storage.count(test_type), 0)
+        self.assertEqual(storage.count(BaseModel), len(storage.all(BaseModel)))
+
+        for index in range(2):
+            state = State()
+            storage.new(state)
+        storage.save()
+
+        self.assertEqual(storage.count(State), len(storage.all(State)))
+        self.assertEqual(storage.count(None),
+                         len(storage.all(State)) + len(storage.all(BaseModel)))
+        FileStorage._FileStorage__objects = save
