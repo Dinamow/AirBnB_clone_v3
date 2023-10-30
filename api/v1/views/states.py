@@ -61,7 +61,7 @@ def putstate(state_id):
     return jsonify(stateObject.to_dict()), '200'
 
 
-@app_views.route('/states/', methods=['POST'])
+@app_views.route('/states', methods=['POST'])
 def poststate():
     """post state"""
     try:
@@ -70,7 +70,8 @@ def poststate():
         abort(400, {'Not a JSON'})
     if response.get('name') is None:
         abort(400, {'Missing name'})
-    stateObject = State(name=response['name'])
+    stateObject = State()
+    stateObject.name = response['name']
     storage.new(stateObject)
     storage.save()
     return jsonify(stateObject.to_dict()), '201'
