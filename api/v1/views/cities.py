@@ -5,20 +5,20 @@ from api.v1.views import app_views
 from flask import jsonify, abort, request
 from models import storage
 from models.city import City
+from models.state import State
 
 
 @app_views.route('/states/<string:state_id>/cities', methods=['GET'],
                  strict_slashes=False)
 def CitiesBySateId(state_id):
     """get cities by state id"""
-    cities = storage.all('City')
-    ll = []
-    for x in cities.values():
-        if x.state_id == state_id:
-            ll.append(x.to_dict())
-    if len(ll) <= 0:
+    state = storage.get(State, state_id)
+    if not state:
         abort(404)
-    return jsonify(ll), 200
+    city_list = []
+    for city in state.cities:
+        city_list.append(city.to_dict())
+    return jsonify(city_list)
 
 
 @app_views.route('/cities/<string:city_id>', methods=['GET'],
@@ -26,7 +26,7 @@ def CitiesBySateId(state_id):
 def getCityById(city_id):
     """get city by id"""
     x = storage.get(City, city_id)
-    if x is None:
+    if not x:
         abort(404)
     return jsonify(x.to_dict()), 200
 
@@ -36,7 +36,7 @@ def getCityById(city_id):
 def deletecity(city_id):
     """deletes city by id"""
     x = storage.get(City, city_id)
-    if x is None:
+    if not x:
         abort(404)
     storage.delete(x)
     storage.save()
@@ -72,7 +72,10 @@ def createcity(state_id):
         abort(400, {'Not a JSON'})
     if not response.get('name'):
         abort(400, {'Missing name'})
+    if not storage.get(State, state_id):
+        abort(404)
     stateObject = City(**response)
+    setattr(new_city, 'state_id', state_id)
     storage.new(stateObject)
     storage.save()
     return jsonify(stateObject.to_dict()), '201'
