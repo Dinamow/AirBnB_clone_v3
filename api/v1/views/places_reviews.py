@@ -49,22 +49,20 @@ def DeleteReviewById(review_id):
                  strict_slashes=False)
 def POSTReviewById(place_id):
     """delete review by id"""
-    try:
-        response = request.get_json()
-    except ex:
+    response = request.get_json()
+    if not response:
         abort(400, {'error': 'Not a JSON'})
     place = storage.get(Place, place_id)
     if not place:
         abort(404)
-    user_id = response.get('user_id')
-    if not user_id:
+    if not response.get('user_id'):
         abort(400, {'error': 'Missing user_id'})
     if not response.get('text'):
         abort(400, {'error': 'Missing text'})
-    user = storage.get(User, user_id)
-    if not user:
+    if not storage.get(User, user_id):
         abort(404)
-    stateObject = Review(user_id=response['user_id'], text=response['text'])
+    stateObject = Review(**response)
+    setattr(stateObject, 'place_id', place_id)
     storage.new(stateObject)
     storage.save()
     return jsonify(stateObject.to_dict()), '201'
@@ -74,9 +72,8 @@ def POSTReviewById(place_id):
                  strict_slashes=False)
 def PUTReviewById(review_id):
     """delete review by id"""
-    try:
-        response = request.get_json()
-    except ex:
+    response = request.get_json()
+    if not response:
         abort(400, {'error': 'Not a JSON'})
     stateObject = storage.get(Review, review_id)
     if stateObject is None:
