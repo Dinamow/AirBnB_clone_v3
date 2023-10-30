@@ -6,7 +6,7 @@ from models import storage
 from models.amenity import Amenity
 
 
-@app_views.route('amenities', methods=['GET'],
+@app_views.route('/amenities', methods=['GET'],
                  strict_slashes=False)
 def getAmentiy():
     """get amentiy"""
@@ -17,7 +17,7 @@ def getAmentiy():
     return jsonify(ll)
 
 
-@app_views.route('amenities/<amenity_id>', methods=['GET'],
+@app_views.route('/amenities/<string:amenity_id>', methods=['GET'],
                  strict_slashes=False)
 def getAmentiyById(amenity_id):
     """get amentiy"""
@@ -28,7 +28,7 @@ def getAmentiyById(amenity_id):
         abort(404)
 
 
-@app_views.route('amenities/<amenity_id>', methods=['DELETE'],
+@app_views.route('/amenities/<string:amenity_id>', methods=['DELETE'],
                  strict_slashes=False)
 def DeleteAmentiyById(amenity_id):
     """delete amentiy"""
@@ -41,28 +41,26 @@ def DeleteAmentiyById(amenity_id):
         return (jsonify({}), 200)
 
 
-@app_views.route('amenities', methods=['POST'],
+@app_views.route('/amenities', methods=['POST'],
                  strict_slashes=False)
 def CreateAmenity():
     """Post amentiy"""
-    try:
-        data = request.get_json()
-    except Exception as e:
+    data = request.get_json()
+    if not data:
         return jsonify({"error": "Not a JSON"}), 400
-    if "name" not in data:
+    if not data.get('name'):
         return jsonify({"error": "Missing name"}), 400
-    amenity = Amenity(name=data["name"])
+    amenity = Amenity(**data)
     storage.new(amenity)
     storage.save()
 
 
-@app_views.route('amenities/<amenity_id>', methods=['POST'],
+@app_views.route('/amenities/<string:amenity_id>', methods=['PUT'],
                  strict_slashes=False)
 def UpdateAmenity(amenity_id):
     """Update amentiy"""
-    try:
         data = request.get_json()
-    except Exception as e:
+    if not data:
         return jsonify({"error": "Not a JSON"}), 400
     amenity = storage.get(Amenity, amenity_id)
     if not amenity_id:
