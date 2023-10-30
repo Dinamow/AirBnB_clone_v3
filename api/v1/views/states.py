@@ -32,7 +32,7 @@ def StatusWithId(state_id):
                  methods=['DELETE'], strict_slashes=False)
 def DeleteObj(state_id):
     """deletes obj"""
-    x = storage.get(State, state_id)
+    x = storage.get('State', state_id)
     if x is None:
         abort(404)
     storage.delete(x)
@@ -50,7 +50,7 @@ def putinV(state_id):
         abort(400, {'Not a JSON'})
     if response.get('name') is None:
         abort(400, {'Missing name'})
-    stateObject = storage.get(State, state_id)
+    stateObject = storage.get('State', state_id)
     if stateObject is None:
         abort(404)
     ignoreKeys = ['id', 'created_at', 'updated_at']
