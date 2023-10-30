@@ -70,8 +70,6 @@ def createcity(state_id):
     response = request.get_json()
     if not response:
         abort(400, {'Not a JSON'})
-    if not response.get('name'):
-        abort(400, {'Missing name'})
     if not storage.get(State, state_id):
         abort(404)
     stateObject = City(**response)
