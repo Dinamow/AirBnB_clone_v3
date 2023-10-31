@@ -55,7 +55,7 @@ def CreateUser():
     user = User(**data)
     storage.new(user)
     storage.save()
-    return jsonify(data.to_dict()), 201
+    return jsonify(user.to_dict()), 201
 
 
 @app_views.route('/users/<string:user_id>', methods=['PUT'],
@@ -66,7 +66,7 @@ def UpdateUser(user_id):
     if not data:
         return jsonify({"error": "Not a JSON"}), 400
     user = storage.get(User, user_id)
-    if not user_id:
+    if not user:
         abort(404)
     else:
         ignoreKeys = ['id', 'created_at', 'updated_at']
