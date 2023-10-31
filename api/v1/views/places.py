@@ -13,12 +13,14 @@ from models.user import User
 def getPlacesByCity(city_id):
     """get list of places"""
     ob = storage.all('Place')
+    if not storage.get(City, city_id):
+        abort(404)
     ll = []
     for place in ob.values():
         if city_id == place.city_id:
             ll.append(place.to_dict())
     if len(ll) <= 0:
-        abort(404)
+        return 0
     return jsonify(ll)
 
 
