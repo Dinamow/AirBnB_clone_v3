@@ -64,7 +64,7 @@ def UpdateAmenity(amenity_id):
     if not data:
         return jsonify({"error": "Not a JSON"}), 400
     amenity = storage.get(Amenity, amenity_id)
-    if not amenity_id:
+    if not amenity:
         abort(404)
     else:
         ignoreKeys = ['id', 'created_at', 'updated_at']
