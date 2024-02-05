@@ -21,12 +21,15 @@ def statusok():
 @app_views.route('stats', strict_slashes=False)
 def statssok():
     """stats home page"""
+    x = storage.all()
+    for i in x.keys():
+        print(x)
     data = {
             "amenities": storage.count(Amenity),
             "cities": storage.count(City),
             "places": storage.count(Place),
             "reviews": storage.count(Review),
             "states": storage.count(State),
-            "users": storage.count(User),
+            "users": storage.count(User)
            }
     return jsonify(data)
